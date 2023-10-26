@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { cloneDeep } from 'lodash'
 import SaveForm from './components/SaveForm'
 import QuizesList from './components/QuizesList/QuizesList'
 import { QUIZES } from './dummyData'
@@ -12,6 +13,19 @@ function App() {
   const toggleForm = (quiz = {}) => {
     setIsSaving((prev) => !prev)
     setSelectedQuiz(quiz)
+  }
+  const saveQuiz = (quiz) => {
+    if (!selectedQuiz?.id) {
+      setQuizes([...quizes, quiz])
+    } else {
+      const clonedQuizes = cloneDeep(quizes)
+      const modifiedQuizIndex = clonedQuizes.findIndex(
+        ({ id }) => id === selectedQuiz.id,
+      )
+      clonedQuizes[modifiedQuizIndex] = quiz
+      setQuizes(clonedQuizes)
+    }
+    setIsSaving((prev) => !prev)
   }
 
   return (
@@ -27,7 +41,7 @@ function App() {
         </button>
       )}
       {isSaving ? (
-        <SaveForm selectedQuiz={selectedQuiz} />
+        <SaveForm selectedQuiz={selectedQuiz} saveQuiz={saveQuiz} />
       ) : (
         <QuizesList quizes={QUIZES} toggleForm={toggleForm} />
       )}
