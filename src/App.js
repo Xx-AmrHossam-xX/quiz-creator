@@ -1,25 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from 'react'
+import SaveForm from './components/SaveForm'
+import QuizesList from './components/QuizesList'
+import './App.css'
 
 function App() {
+  const [quizes, setQuizes] = useState([])
+  const [isSaving, setIsSaving] = useState(false)
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+      <h1>Quiz Creator/Editor</h1>
+      {!isSaving && (
+        <button
+          class="btn btn-primary btn-lg mt-5"
+          type="button"
+          onClick={() => setIsSaving(true)}
         >
-          Learn React
-        </a>
-      </header>
+          Create a quiz
+        </button>
+      )}
+      {isSaving ? <SaveForm /> : <QuizesList />}
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
