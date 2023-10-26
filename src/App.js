@@ -1,22 +1,41 @@
 import { useState } from 'react'
 import { cloneDeep } from 'lodash'
+import { v4 as uuidv4 } from 'uuid'
 import SaveForm from './components/SaveForm'
 import QuizesList from './components/QuizesList/QuizesList'
-import { QUIZES } from './dummyData'
+import { emptyForm } from './constants'
 import './App.css'
 
 function App() {
   const [quizes, setQuizes] = useState([])
   const [isSaving, setIsSaving] = useState(false)
-  const [selectedQuiz, setSelectedQuiz] = useState({})
+  const [selectedQuiz, setSelectedQuiz] = useState(emptyForm)
 
-  const toggleForm = (quiz = {}) => {
+  const toggleForm = (quiz = emptyForm) => {
     setIsSaving((prev) => !prev)
     setSelectedQuiz(quiz)
   }
   const saveQuiz = (quiz) => {
+    quiz.modified = new Date().toISOString()
     if (!selectedQuiz?.id) {
-      setQuizes([...quizes, quiz])
+      const quizWithIds = {
+        ...quiz,
+        id: uuidv4(),
+        created: new Date().toISOString(),
+        questions_answers: quiz.questions_answers.map((question) => {
+          return {
+            ...question,
+            id: uuidv4(),
+            answers: question.answers.map((answer) => {
+              return {
+                ...answer,
+                id: uuidv4(),
+              }
+            }),
+          }
+        }),
+      }
+      setQuizes([...quizes, quizWithIds])
     } else {
       const clonedQuizes = cloneDeep(quizes)
       const modifiedQuizIndex = clonedQuizes.findIndex(
@@ -25,7 +44,7 @@ function App() {
       clonedQuizes[modifiedQuizIndex] = quiz
       setQuizes(clonedQuizes)
     }
-    setIsSaving((prev) => !prev)
+    toggleForm()
   }
 
   return (
@@ -33,7 +52,7 @@ function App() {
       <h1>Quiz Creator/Editor</h1>
       {!isSaving && (
         <button
-          class="btn btn-primary btn-lg mt-5"
+          className="btn btn-primary btn-lg mt-5"
           type="button"
           onClick={() => toggleForm()}
         >
@@ -43,7 +62,7 @@ function App() {
       {isSaving ? (
         <SaveForm selectedQuiz={selectedQuiz} saveQuiz={saveQuiz} />
       ) : (
-        <QuizesList quizes={QUIZES} toggleForm={toggleForm} />
+        <QuizesList quizes={quizes} toggleForm={toggleForm} />
       )}
     </div>
   )
