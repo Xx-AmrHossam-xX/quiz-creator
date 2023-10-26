@@ -1,5 +1,5 @@
-const SaveForm = () => {
-  return <div>asdsadsa</div>
+const SaveForm = ({ selectedQuiz }) => {
+  return <div>{selectedQuiz?.title ?? 'CREATE'}</div>
 }
 
 export default SaveForm
