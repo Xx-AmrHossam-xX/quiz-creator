@@ -28,8 +28,15 @@ const SaveForm = ({ selectedQuiz, saveQuiz }) => {
       ],
     })
   }
+  const removeQuestionsAnswers = (key) => {
+    const clonedQuestions_answers = cloneDeep(data.questions_answers)
+    clonedQuestions_answers.splice(key)
+    setData({
+      ...data,
+      questions_answers: clonedQuestions_answers,
+    })
+  }
   const updateAnswers = (key, answerKey, name, value) => {
-    console.log(value)
     const clonedQuestions_answers = cloneDeep(data.questions_answers)
     if (name !== 'is_true') {
       clonedQuestions_answers[key].answers[answerKey][name] = value
@@ -50,6 +57,14 @@ const SaveForm = ({ selectedQuiz, saveQuiz }) => {
     const clonedData = cloneDeep(data)
     clonedData.questions_answers[key].answers.push(emptyAnswer)
     setData(clonedData)
+  }
+  const removeAnswer = (key, answerKey) => {
+    const clonedQuestions_answers = cloneDeep(data.questions_answers)
+    clonedQuestions_answers[key].answers.splice(answerKey, 1)
+    setData({
+      ...data,
+      questions_answers: clonedQuestions_answers,
+    })
   }
   const submit = (event) => {
     event.preventDefault()
@@ -186,11 +201,22 @@ const SaveForm = ({ selectedQuiz, saveQuiz }) => {
                     onChange={(e) => updateAnswers(key, answerKey, 'is_true')}
                   />
                   <label
-                    className="form-check-label ms-2"
+                    className="form-check-label ms-2 mb-3"
                     htmlFor={`is_true_${key}_${answerKey}`}
                   >
                     is the correct answer
                   </label>
+                  {questions_answer.answers.length > 2 && (
+                    <div className="d-flex justify-content-center">
+                      <button
+                        type="button"
+                        className="btn btn-danger"
+                        onClick={() => removeAnswer(key, answerKey)}
+                      >
+                        remove answer
+                      </button>
+                    </div>
+                  )}
                 </div>
               )
             })}
@@ -201,6 +227,15 @@ const SaveForm = ({ selectedQuiz, saveQuiz }) => {
             >
               Add an answer
             </button>
+            {data.questions_answers.length > 2 && (
+              <button
+                type="button"
+                className="btn btn-danger ms-3"
+                onClick={() => removeQuestionsAnswers(key)}
+              >
+                remove question
+              </button>
+            )}
           </div>
         )
       })}
@@ -211,8 +246,8 @@ const SaveForm = ({ selectedQuiz, saveQuiz }) => {
       >
         Add a question
       </button>
-      <div className="mb-3">
-        <button type="submit" className="btn btn-primary mb-3">
+      <div className="mb-3 d-flex justify-content center">
+        <button type="submit" className="btn btn-success btn-lg mb-3">
           Save
         </button>
       </div>
