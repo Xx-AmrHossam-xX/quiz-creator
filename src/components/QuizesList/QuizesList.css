@@ -1,3 +1,12 @@
 .quiz-card{
     width: 18rem;
 }
+.quiz-update-button{
+    background-color: #6c757d;
+    color:white;
+    text-align: center;
+}
+.quiz-update-button:hover{
+   background-color:#5c636a;
+   color:white;
+}

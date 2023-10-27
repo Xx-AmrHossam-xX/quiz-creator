@@ -17,7 +17,7 @@ const QuizesList = ({ quizes, toggleForm }) => {
               <button
                 type="button"
                 key={quiz.id}
-                className="list-group-item list-group-item-action quiz-item"
+                className="mt-2 list-group-item list-group-item-action quiz-update-button"
                 onClick={() => toggleForm(quiz)}
               >
                 Update

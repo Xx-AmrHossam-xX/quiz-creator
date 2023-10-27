@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { cloneDeep } from 'lodash'
+import TextInput from './TextInput'
 import { emptyQuestions_answers, emptyAnswer } from '../constants'
 
 const SaveForm = ({ selectedQuiz, saveQuiz }) => {
@@ -73,21 +74,13 @@ const SaveForm = ({ selectedQuiz, saveQuiz }) => {
   }
   return (
     <form className="row g-3" onSubmit={(event) => submit(event)}>
-      <div className="mb-3">
-        <label className="form-label" htmlFor="title">
-          title
-        </label>
-        <input
-          required
-          type="text"
-          className="form-control"
-          name="title"
-          id="title"
-          placeholder="title"
-          value={data.title}
-          onChange={updateData}
-        />
-      </div>
+      <TextInput
+        name={'title'}
+        value={data.title}
+        onChange={updateData}
+        label={'title'}
+      />
+
       <div className="mb-3">
         <label className="form-label">description</label>
         <textarea
@@ -131,66 +124,42 @@ const SaveForm = ({ selectedQuiz, saveQuiz }) => {
         return (
           <div className="questions" key={`questions_${key}`}>
             <h4>{`Question ${key + 1}`}</h4>
-            <div className="mb-3">
-              <label className="form-label">false feedback</label>
-              <input
-                required
-                type="text"
-                className="form-control"
-                name="feedback_false"
-                placeholder="false feedback"
-                value={questions_answer.feedback_false}
-                onChange={(e) =>
-                  updateQuestionsAnswers(key, 'feedback_false', e.target.value)
-                }
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">true feedback</label>
-              <input
-                required
-                type="text"
-                className="form-control"
-                name="feedback_true"
-                placeholder="true feedback"
-                value={questions_answer.feedback_true}
-                onChange={(e) =>
-                  updateQuestionsAnswers(key, 'feedback_true', e.target.value)
-                }
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">text</label>
-              <input
-                required
-                type="text"
-                className="form-control"
-                name="text"
-                placeholder="text"
-                value={questions_answer.text}
-                onChange={(e) =>
-                  updateQuestionsAnswers(key, 'text', e.target.value)
-                }
-              />
-            </div>
+            <TextInput
+              value={questions_answer.feedback_false}
+              onChange={(e) =>
+                updateQuestionsAnswers(key, 'feedback_false', e.target.value)
+              }
+              name={'feedback_false'}
+              label={'false feedback'}
+            />
+            <TextInput
+              value={questions_answer.feedback_true}
+              onChange={(e) =>
+                updateQuestionsAnswers(key, 'feedback_true', e.target.value)
+              }
+              name={'feedback_true'}
+              label={'true feedback'}
+            />
+            <TextInput
+              value={questions_answer.text}
+              onChange={(e) =>
+                updateQuestionsAnswers(key, 'text', e.target.value)
+              }
+              name={'text'}
+              label={'text'}
+            />
             {questions_answer.answers.map((answer, answerKey) => {
               return (
                 <div className="answer" key={`answer-${answerKey}`}>
                   <h5>{`Answer ${answerKey + 1}`}</h5>
-                  <div className="mb-3">
-                    <label className="form-label">text</label>
-                    <input
-                      required
-                      type="text"
-                      className="form-control"
-                      name="text"
-                      placeholder="text"
-                      value={answer.text}
-                      onChange={(e) =>
-                        updateAnswers(key, answerKey, 'text', e.target.value)
-                      }
-                    />
-                  </div>
+                  <TextInput
+                    value={answer.text}
+                    onChange={(e) =>
+                      updateAnswers(key, answerKey, 'text', e.target.value)
+                    }
+                    name={'text'}
+                    label={'text'}
+                  />
                   <input
                     required
                     className="form-check-input"
